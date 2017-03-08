@@ -17,10 +17,33 @@ LEFT JOIN Invoice i ON c.CustomerId = i.CustomerId
 WHERE i.BillingCountry = 'Brazil'
 
 /* 4. Provide a query showing only the Employees who are Sales Agents. */
+SELECT e.LastName, e.Title
+FROM Employee e
+WHERE e.Title = 'Sales Support Agent'
+
 /* 5. Provide a query showing a unique list of billing countries from the Invoice table. */
+SELECT i.BillingCountry
+FROM Invoice i
+GROUP BY i.BillingCountry
+
 /* 6. Provide a query showing the invoices of customers who are from Brazil. */
-/* 7. Provide a query that shows the invoices associated with each sales agent. The resultant table should include the Sales Agent's full name. */
+SELECT *
+FROM Invoice  i
+WHERE i.BillingCountry = 'Brazil'
+
+/* 7. Provide a query that shows the invoices associated with each sales agent.
+The resultant table should include the Sales Agent's full name. */
+SELECT e.FirstName, e.LastName, c.LastName AS 'Customer Last Name', i.*
+FROM Employee e
+JOIN Invoice i ON i.CustomerId = c.CustomerId
+JOIN Customer c ON c.SupportRepId = e.EmployeeId
+
 /* 8. Provide a query that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices and customers. */
+SELECT i.Total, c.FirstName AS 'Customer First', c.LastName AS 'Customer Last', c.Country, e.FirstName AS 'Employee First', e.LastName AS 'Employee Last'
+FROM Invoice i
+JOIN Employee e ON e.EmployeeId = c.SupportRepId
+JOIN Customer c ON c.CustomerId = i.CustomerId
+
 /* 9. How many Invoices were there in 2009 and 2011? What are the respective total sales for each of those years? */
 /* 10. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for Invoice ID 37. */
 /* 11. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for each Invoice. HINT: [GROUP BY](http://www.sqlite.org/lang_select.html#resultset) */
