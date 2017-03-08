@@ -62,24 +62,58 @@ FROM InvoiceLine il
 GROUP BY il.InvoiceId
 
 /* 12. Provide a query that includes the track name with each invoice line item. */
-SELECT il.*, t.Name AS
+SELECT il.*, t.Name
 FROM InvoiceLine il
 JOIN Track t ON t.TrackId = il.TrackId
 
 /* 13. Provide a query that includes the purchased track name AND artist name with each invoice line item. */
+SELECT il.*, t.Name, a.Name As Artist
+FROM InvoiceLine il
+JOIN Track t ON t.TrackId = il.TrackId
+JOIN Album al ON al.AlbumId = t.AlbumId
+JOIN Artist a ON a.ArtistId = al.ArtistId
+
+/* 14. Provide a query that shows the # of invoices per country.
+HINT: [GROUP BY](http://www.sqlite.org/lang_select.html#resultset) */
+SELECT i.BillingCountry, COUNT(i.BillingCountry) AS number_of_invoices
+FROM Invoice i
+GROUP BY i.BillingCountry
+ORDER BY number_of_invoices DESC
+
+/* 15. Provide a query that shows the total number of tracks in each playlist.
+The Playlist name should be included on the resultant table. */
+SELECT pl.Name, COUNT(plt.TrackId) AS number_of_tracks
+FROM PlayList pl
+JOIN PlayListTrack plt ON plt.PlayListId = pl.PlayListId
+GROUP BY pl.Name
 
 
-/* 14. Provide a query that shows the # of invoices per country. HINT: [GROUP BY](http://www.sqlite.org/lang_select.html#resultset) */
-/* 15. Provide a query that shows the total number of tracks in each playlist. The Playlist name should be include on the resultant table. */
-/* 16. Provide a query that shows all the Tracks, but displays no IDs. The resultant table should include the Album name, Media type and Genre. */
+/* 16. Provide a query that shows all the Tracks, but displays no IDs.
+The resultant table should include the Album name, Media type and Genre. */
+SELECT t.Name AS track_name, a.Title AS album_title, mt.Name AS media_type, g.Name AS genre, t.Composer, t.Milliseconds AS length, t.Bytes, t.UnitPrice
+FROM Track t
+JOIN Album a ON a.AlbumId = t.AlbumId
+JOIN MediaType mt ON mt.MediaTypeId = t.MediaTypeId
+JOIN Genre g ON g.GenreId = t.GenreId
+
 /* 17. Provide a query that shows all Invoices but includes the # of invoice line items. */
+
 /* 18. Provide a query that shows total sales made by each sales agent. */
+
 /* 19. Which sales agent made the most in sales in 2009? */
+
 /* 20. Which sales agent made the most in sales in 2010? */
+
 /* 21. Which sales agent made the most in sales over all? */
+
 /* 22. Provide a query that shows the # of customers assigned to each sales agent. */
+
 /* 23. Provide a query that shows the total sales per country. Which country's customers spent the most? */
+
 /* 24. Provide a query that shows the most purchased track of 2013. */
+
 /* 25. Provide a query that shows the top 5 most purchased tracks over all. */
+
 /* 26. Provide a query that shows the top 3 best selling artists. */
+
 /* 27. Provide a query that shows the most purchased Media Type. */
