@@ -146,12 +146,45 @@ JOIN Customer c ON c.SupportRepId = e.EmployeeId
 GROUP BY e.EmployeeId
 
 /* 23. Provide a query that shows the total sales per country. Which country's customers spent the most? */
-
+SELECT i.BillingCountry, SUM(i.Total) sales_total
+FROM Invoice i
+GROUP BY i.BillingCountry
+ORDER BY sales_total DESC
 
 /* 24. Provide a query that shows the most purchased track of 2013. */
+SELECT t.Name, COUNT(t.Name) AS purchased
+FROM Track t
+JOIN InvoiceLine il ON il.TrackId = t.TrackId
+JOIN Invoice i ON i.InvoiceId = il.InvoiceId
+WHERE i.InvoiceDate LIKE '2013%'
+GROUP BY t.Name
+ORDER BY purchased DESC
 
 /* 25. Provide a query that shows the top 5 most purchased tracks over all. */
+SELECT t.Name, COUNT(t.Name) AS purchased
+FROM Track t
+JOIN InvoiceLine il ON il.TrackId = t.TrackId
+JOIN Invoice i ON i.InvoiceId = il.InvoiceId
+GROUP BY t.Name
+ORDER BY purchased DESC
+LIMIT 5
 
 /* 26. Provide a query that shows the top 3 best selling artists. */
+SELECT a.Name, SUM(i.Total) total_sales
+FROM Artist a
+JOIN Album al ON al.ArtistId = a.ArtistId
+JOIN Track t ON t.AlbumId = al.AlbumId
+JOIN InvoiceLine il ON il.TrackId = t.TrackId
+JOIN Invoice i ON i.InvoiceId = il.InvoiceId
+GROUP BY a.Name
+ORDER BY total_sales DESC
+LIMIT 5
 
 /* 27. Provide a query that shows the most purchased Media Type. */
+SELECT mt.Name AS MediaType, COUNT(il.InvoiceLineId) most_purchased
+FROM MediaType mt, Track t, InvoiceLine il
+ON t.MediaTypeId = mt.MediaTypeId
+AND il.TrackId = t.TrackId
+GROUP BY mt.Name
+ORDER BY most_purchased DESC
+LIMIT 1
