@@ -45,10 +45,30 @@ JOIN Employee e ON e.EmployeeId = c.SupportRepId
 JOIN Customer c ON c.CustomerId = i.CustomerId
 
 /* 9. How many Invoices were there in 2009 and 2011? What are the respective total sales for each of those years? */
+SELECT strftime('%Y', i.InvoiceDate) AS Year, COUNT(i.InvoiceDate) AS Count, SUM(i.Total) AS Total_Sales
+FROM Invoice i
+WHERE (i.InvoiceDate LIKE '2011%' OR i.InvoiceDate LIKE '2009%')
+GROUP BY strftime('%Y', i.InvoiceDate)
+
 /* 10. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for Invoice ID 37. */
-/* 11. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for each Invoice. HINT: [GROUP BY](http://www.sqlite.org/lang_select.html#resultset) */
+SELECT COUNT(il.InvoiceLineId)
+FROM InvoiceLine il
+WHERE il.InvoiceId = 37
+
+/* 11. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for each Invoice.
+HINT: [GROUP BY](http://www.sqlite.org/lang_select.html#resultset) */
+SELECT il.InvoiceId, COUNT(il.InvoiceLineId) As number_of_lines
+FROM InvoiceLine il
+GROUP BY il.InvoiceId
+
 /* 12. Provide a query that includes the track name with each invoice line item. */
+SELECT il.*, t.Name AS
+FROM InvoiceLine il
+JOIN Track t ON t.TrackId = il.TrackId
+
 /* 13. Provide a query that includes the purchased track name AND artist name with each invoice line item. */
+
+
 /* 14. Provide a query that shows the # of invoices per country. HINT: [GROUP BY](http://www.sqlite.org/lang_select.html#resultset) */
 /* 15. Provide a query that shows the total number of tracks in each playlist. The Playlist name should be include on the resultant table. */
 /* 16. Provide a query that shows all the Tracks, but displays no IDs. The resultant table should include the Album name, Media type and Genre. */
